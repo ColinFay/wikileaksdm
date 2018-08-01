@@ -16,6 +16,37 @@ output:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+<style>
+@import url('https://fonts.googleapis.com/css?family=Nunito+Sans:400,700');
+
+body{
+  font-family: 'Nunito Sans';
+}
+
+h2 {
+  border-bottom: 2px solid darkgrey;
+}
+h3:before {
+    content: "> ";
+    margin-right: 6px;
+}
+h4 {
+  text-align: center;
+  font-size: 2em;
+}
+.dataTables_wrapper{
+  padding-bottom: 30px ;
+}
+
+div .dygraphs {
+  margin-bottom: 30px ;
+}
+
+details {
+    margin-bottom: 30px;
+}
+</style>
+
 ## Raw to csv
 
 ### Downloading 
