@@ -765,7 +765,7 @@ res &lt;- res %&gt;%
 <h4>User</h4>
 <pre class="r"><code>walk(unique(res$user), 
     ~ filter(res, user == .x) %&gt;%
-    write_csv(glue::glue(&quot;user_{.x}.csv&quot;))
+    write_csv(glue::glue(&quot;user_{make.names(.x)}.csv&quot;))
     )</code></pre>
 </div>
 </div>

@@ -136,7 +136,7 @@ walk(2015:2017,
 ```{r}
 walk(unique(res$user), 
     ~ filter(res, user == .x) %>%
-    write_csv(glue::glue("user_{.x}.csv"))
+    write_csv(glue::glue("user_{make.names(.x)}.csv"))
     )
 ```
 
