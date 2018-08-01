@@ -1,7 +1,13 @@
 ---
-title: "Wikileaks Twitter DM"
+title: "Wikileaks Twitter DM - Methodo"
 author: '@_colinfay'
 date: "`r Sys.Date()`"
+navlink: "[Wikileaks Twitter DM](https://colinfay.me/wikileaksdm)"
+og:
+  type: "article"
+  title: "Wikileaks Twitter DM"
+footer:
+  - content: '<a href="https://colinfay.me">colinfay.me</a> • <a href="https://twitter.com/_ColinFay">@_colinfay</a><br/>'
 output: 
   markdowntemplates::skeleton
 ---
