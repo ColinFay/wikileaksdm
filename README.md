@@ -83,3 +83,39 @@ Extracted links, (starting with `http`)
 Everything has been done in R. 
 
 Methodology is described in [methodo.Rmd](methodo.Rmd)
+
+## Packages used: 
+
+The packages used include : 
+
+### ⚒ Wrangling:
+
+📦 {dplyr}: https://github.com/tidyverse/dplyr
+
+📦 {rvest}: https://github.com/hadley/rvest
+
+📦 {stringr}: https://github.com/tidyverse/stringr
+
+📦 {lubridate}: https://github.com/tidyverse/lubridate
+
+📦 {tidyr}: https://github.com/tidyverse/tidyr
+
+📦 {purrr}: https://github.com/tidyverse/purrr
+
+📦 {readr}: https://github.com/tidyverse/readr
+
+### 🎨 Web Page (the above, plus) :
+
+📦 {fontawesome}: https://github.com/rstudio/fontawesome
+
+📦 {DT}: https://github.com/rstudio/DT
+
+📦 {dygraphs}: https://github.com/rstudio/dygraphs
+
+📦 {ggplot2}: https://github.com/tidyverse/readr
+
+📦 {markdowntemplates}: https://github.com/hrbrmstr/markdowntemplates
+
+📦 {knitr}: https://github.com/yihui/knitr
+
+📦 {markdown}: httprs://github.com/rstudio/rmarkdown
