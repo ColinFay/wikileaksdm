@@ -1,0 +1,182 @@
+---
+title: "Wikileaks Twitter DM"
+author: '@_colinfay'
+date: "`r Sys.Date()`"
+output: 
+  markdowntemplates::skeleton
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Raw to csv
+
+### Downloading 
+
+```{r message = FALSE}
+library(tidyverse)
+library(rvest)
+doc <- read_html("https://emma.best/2018/07/29/11000-messages-from-private-wikileaks-chat-released/")
+```
+
+### Getting data as a table
+
+```{r}
+res_raw <- doc %>% 
+  # Getting the list inside the ol
+  html_nodes("p") %>%
+  # Extracting the text
+  html_text() %>% 
+  # Turning it into a table
+  as.tibble() %>%
+  # Removing empty raws
+  filter(nchar(value) > 1) 
+```
+
+### Cleaning 
+
+Element 1 to 8 are the content of the blogpost, not the content of the conversation. Removing it:
+
+```{r}
+res <- slice(res_raw, 9:nrow(res_raw))
+```
+
+
+In order to tidy the format, add <DMConversationEntry> as author when the text is a `DMConversationEntry`
+
+```{r}
+res <- res_raw %>% 
+  mutate(value = str_replace_all(value, 
+                                 "\\[DMConversationEntry\\]",
+                                 "<DMConversationEntry>")) 
+```
+
+Removed, the last of the corpus: 
+
++ "[LatestTweetID] 931704226425856001", line 22751 of the original document
+
+```{r}
+res <- filter(res, ! str_detect(value, "931704226425856001"))
+```
+
+
+When a line `n` doesn't start with a date (middle of a DM), paste the content at the end of the line n-1.
+
+Example with lines 93 & 94:
+
+|  value|
+|--:|
+|  "[2015-05-02 14:12:27] <WISE Up Wales> OK, thanks H. Security issues were about who was on the list then?"|
+|  "Never quite know who you’re dealing with online I guess. I don’t, anyway!"|
+
+94 is paste at the end of 93 and removed. 
+
+```{r}
+for (i in nrow(res):1){
+  if (!grepl(pattern = "\\[.{4}-.{2}-.{2} .{2}:.{2}:.{2}\\]|DMConversationEntry", res[i,])){
+    res[i-1,] <- paste(res[i-1,], res[i,])
+  }
+}
+# Remove column with no date
+res <- res %>% 
+  mutate(has_date = str_detect(value, pattern = "\\[.{4}-.{2}-.{2} .{2}:.{2}:.{2}\\]|DMConversationEntry")) %>%
+  filter(has_date) %>%
+  select(-has_date)
+```
+
+### Extract key elements 
+
+```{r}
+res <- res %>%
+  extract(value,"user", regex = "<([a-zA-Z0-9 ]*)>", remove = FALSE) %>%
+  extract(value,"date", regex = "\\[(.{4}-.{2}-.{2} .{2}:.{2}:.{2})\\] .*", remove = FALSE) %>%
+  extract(value, "text", regex = "<[a-zA-Z0-9 ]*> (.*)", remove = FALSE) %>%
+  select(-value)
+```
+
+When date is missing, it's because it's a `DMConversationEntry`. 
+
+```{r}
+res %>% 
+  filter(user == "DMConversationEntry") %>%
+  summarize(nas = sum(is.na(date)), 
+            nrow = n())
+```
+
+We fill this with the directly preceeding date: 
+
+```{r}
+res <- fill(res, date)
+```
+
+### Save
+
+#### Global
+
+```{r}
+write_csv(res, "wikileaks_dm.csv")
+```
+
+#### Year
+
+```{r}
+range(res$date)
+```
+
+```{r}
+walk(2015:2017, 
+    ~ filter(res, lubridate::year(date) == .x) %>%
+    write_csv(glue::glue("{.x}.csv"))
+    )
+```
+
+#### User
+
+```{r}
+walk(unique(res$user), 
+    ~ filter(res, user == .x) %>%
+    write_csv(glue::glue("user_{.x}.csv"))
+    )
+```
+
+## Counting users participation
+
+```{r}
+res %>%
+  count(user, sort = TRUE) %>%
+  write_csv("user_count.csv")
+```
+
+## Counting activity by days
+
+```{r}
+res %>%
+  mutate(date = lubridate::ymd_hms(date), 
+         date = lubridate::date(date)) %>% 
+  count(date) %>%
+  write_csv("daily.csv")
+```
+
+## Adding extra info
+
+```{r}
+mentions <- res %>% 
+  mutate(mention = str_extract_all(text, "@[a-zA-Z0-9_]+")) %>%
+  unnest(mention) %>% 
+  select(mention, everything())
+write_csv(mentions, "mentions.csv")
+
+mentions %>%
+  count(mention, sort = TRUE) %>%
+  write_csv("mentions_count.csv")
+```
+
+```{r}
+urls <- res %>% 
+  mutate(url = str_extract_all(text, "http.+")) %>%
+  unnest() %>% 
+  select(url, everything())
+write_csv(urls, "urls.csv")
+```
+

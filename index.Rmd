@@ -1,0 +1,151 @@
+---
+title: "Wikileaks Twitter DM"
+author: '@_colinfay'
+date: "`r Sys.Date()`"
+navlink: "[Wikileaks Twitter DM](https://colinfay.me/wikileaksdm)"
+og:
+  type: "article"
+  title: "Wikileaks Twitter DM"
+footer:
+  - content: '<a href="https://colinfay.me">colinfay.me</a> • <a href="https://twitter.com/_ColinFay">@_colinfay</a><br/>'
+output: markdowntemplates::skeleton
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
+library(tidyverse)
+library(DT) 
+dt <- partial(datatable, 
+                     extensions = 'Buttons', 
+                     options=list(scrollX=TRUE, dom = 'Bfrtip', buttons = c('copy', 'csv')))
+```
+
+<style>
+h4 {
+  text-align: center;
+  font-size: 1.5em;
+}
+.dataTables_wrapper{
+  padding-bottom: 30px ;
+}
+</style>
+
+## About
+
+On the 29th of July 2018, Emma Best published on her website the copy of 11k+ wikileaks Twitter DM : <https://emma.best/2018/07/29/11000-messages-from-private-wikileaks-chat-released/>
+
+Here is a data extraction and wrangling of this corpus, to make it easily searchable, extractable and sharable. 
+
+## The datasets: 
+
+### List of all tweets
+
+A dataset with 3 columns: 
+
++ text: extracted text 
++ date: date of the tweet
++ user: user who sent the tweet
+
+#### Get the csv: [wikileaks_dm.csv](wikileaks_dm.csv)
+
+```{r}
+read_csv("wikileaks_dm.csv") %>% 
+  dt()
+```
+
+### DMS by year 
+
+#### [2015.csv](2015.csv)
+
+```{r}
+read_csv("2015.csv") %>% 
+  dt()
+```
+
+#### [2016.csv](2016.csv)
+
+```{r}
+read_csv("2016.csv") %>% 
+  dt()
+```
+
+#### [2017.csv](2017.csv)
+
+```{r}
+read_csv("2017.csv") %>% 
+  dt()
+```
+
+### Count of user interactions
+
+#### Get the csv: [user_count.csv](user_count.csv)
+
+```{r}
+read_csv("user_count.csv") %>% 
+  dt()
+```
+
+### DMs by users
+
+#### [user_Bean.csv](user_Bean.csv)
+#### [user_Cabledrum.csv](user_Cabledrum.csv)
+#### [user_DMConversationEntry.csv](user_DMConversationEntry.csv)
+#### [user_Emmy B.csv](user_Emmy B.csv)
+#### [user_LibertarianLibrarian.csv](user_LibertarianLibrarian.csv)
+#### [user_M.csv](user_M.csv)
+#### [user_Matt Watt.csv](user_Matt Watt.csv)
+#### [user_noll.csv](user_noll.csv)
+#### [user_SAWC Sydney.csv](user_SAWC Sydney.csv)
+#### [user_voidiss.csv](user_voidiss.csv)
+#### [user_WikiLeaks Press.csv](user_WikiLeaks Press.csv)
+#### [user_WikiLeaks Task Force.csv](user_WikiLeaks Task Force.csv)
+#### [user_WikiLeaks.csv](user_WikiLeaks.csv)
+#### [user_WISE Up Action.csv](user_WISE Up Action.csv)
+#### [user_WISE Up Wales.csv](user_WISE Up Wales.csv)
+
+
+### Count of daily tweets
+
+#### Get the csv: [daily.csv](daily.csv)
+
+```{r}
+read_csv("daily.csv") %>%
+  dt()
+```
+
+### Mentions
+
+Tweets that contains a mention to a Twitter account: 
+
+#### Get the csv: [mentions.csv](mentions.csv)
+
+```{r}
+read_csv("mentions.csv") %>% 
+  dt()
+```
+
+Count of the mentions:
+
+#### Get the csv: [mentions_count.csv](mentions_count.csv)
+
+```{r}
+read_csv("mentions_count.csv") %>% 
+  dt()
+```
+
+### Urls
+
+Extracted links, (starting with `http`)
+
+#### Get the csv: [urls.csv](urls.csv)
+
+```{r}
+read_csv("urls.csv") %>% 
+  dt()
+```
+
+## Methodology 
+
+Everything has been done in R. 
+
+Methodology is described in [methodo](methodo.html)
