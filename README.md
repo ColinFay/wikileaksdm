@@ -30,29 +30,29 @@ A dataset with 3 columns:
 
 + [user_DMConversationEntry.csv](user_DMConversationEntry.csv)
 
-+ [user_Emmy B.csv](user_Emmy B.csv)
++ [user_EmmyB.csv](user_Emmy B.csv)
 
 + [user_LibertarianLibrarian.csv](user_LibertarianLibrarian.csv)
 
 + [user_M.csv](user_M.csv)
 
-+ [user_Matt Watt.csv](user_Matt Watt.csv)
++ [user_MattWatt.csv](user_Matt Watt.csv)
 
 + [user_noll.csv](user_noll.csv)
 
-+ [user_SAWC Sydney.csv](user_SAWC Sydney.csv)
++ [user_SAWCSydney.csv](user_SAWC Sydney.csv)
 
 + [user_voidiss.csv](user_voidiss.csv)
 
-+ [user_WikiLeaks Press.csv](user_WikiLeaks Press.csv)
++ [user_WikiLeaksPress.csv](user_WikiLeaks Press.csv)
 
-+ [user_WikiLeaks Task Force.csv](user_WikiLeaks Task Force.csv)
++ [user_WikiLeaksTaskForce.csv](user_WikiLeaks Task Force.csv)
 
 + [user_WikiLeaks.csv](user_WikiLeaks.csv)
 
-+ [user_WISE Up Action.csv](user_WISE Up Action.csv)
++ [user_WISEUpAction.csv](user_WISE Up Action.csv)
 
-+ [user_WISE Up Wales.csv](user_WISE Up Wales.csv)
++ [user_WISEUpWales.csv](user_WISE Up Wales.csv)
 
 ## Count of user interactions
 
