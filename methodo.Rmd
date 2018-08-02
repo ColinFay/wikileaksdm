@@ -198,6 +198,11 @@ list.files(pattern = "csv") %>%
       path = glue::glue("{tools::file_path_sans_ext(x)}.json")
     )
   })
-
+dir.create("json")
+list.files(pattern = "json") %>%
+  walk(function(x){
+    file.copy(x, glue::glue("json/{x}"))
+    unlink(x)
+  })
 ```
 

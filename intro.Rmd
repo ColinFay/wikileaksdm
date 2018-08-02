@@ -40,19 +40,19 @@ Here is a data extraction and wrangling of this corpus, to make it easily search
 + Every "[link.csv](link.csv)" is a downloadable csv.
 + You can search and order every table. Results of the search are downloadable as csv or can be copied in the clipboard.
 + You can zoom in the time series by selecting the date range. You can also use the selector beside to choose this range. Double click to reset the settings.
-+ Under each dynamic plot, you can find a static plot by clicking on "Static plot".
++ Under each dynamic plot, you can find a static plot by clicking on "Static plost".
 
 > This page may not work as expected on Internet Explorer / Edge. Please switch to another browser if you have trouble reading this page.
 
 ## Data format
 
 + Every csv is encoded in UTF8
-+ You can find these csv in JSON format on the [GitHub repo](https://github.com/ColinFay/wikileaksdm)
++ You can find these csv in JSON format on the [GitHub repo](https://github.com/ColinFay/wikileaksdm/json)
 
 ## Browse through the content
 
 + [Home](index.html) has the full dataset, to search and download.
 + [Timeline](timeline.html) has a series of time-related content: notably DMs by years, and daily count of DMs.
 + [Users](users.html) holds the dataset for each users.
-+ [mentions_urls](mentions_urls.html) holds the extracted mentions and urls
++ [mentions_urls](mention_urls.html) holds the extracted mentions and urls
 + [methodo](methodo.html) contains the methodology used for the data wrangling
