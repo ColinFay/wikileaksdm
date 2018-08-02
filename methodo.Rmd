@@ -13,7 +13,7 @@ output:
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = TRUE, message = FALSE)
 ```
 
 <style>
@@ -51,34 +51,32 @@ details {
 
 ### Downloading 
 
-```{r message = FALSE}
+Made once, saved in [raw.txt](raw.txt). 
+
+```{r message = FALSE, eval = FALSE}
 library(tidyverse)
 library(rvest)
 doc <- read_html("https://emma.best/2018/07/29/11000-messages-from-private-wikileaks-chat-released/")
+doc <- doc %>% 
+  # Getting the p
+  html_nodes("p") %>%
+  html_text()
+
+doc <- doc[! nchar(doc)  == 0]
+# Element 1 to 9 are the content of the blogpost, not the content of the conversation. Removing it:
+
+doc <- doc[10:length(doc)]
+write(doc, "raw.txt")
 ```
 
 ### Getting data as a table
 
 ```{r}
-res_raw <- doc %>% 
-  # Getting the list inside the ol
-  html_nodes("p") %>%
-  # Extracting the text
-  html_text() %>% 
-  # Turning it into a table
-  as.tibble() %>%
-  # Removing empty raws
-  filter(nchar(value) > 1) 
+library(tidyverse)
+res_raw <- read.delim("raw.txt", sep = "\n", header = FALSE) %>% 
+  as.tibble() %>% 
+  rename(value = V1)
 ```
-
-### Cleaning 
-
-Element 1 to 8 are the content of the blogpost, not the content of the conversation. Removing it:
-
-```{r}
-res <- slice(res_raw, 9:nrow(res_raw))
-```
-
 
 In order to tidy the format, add <DMConversationEntry> as author when the text is a `DMConversationEntry`
 
@@ -215,5 +213,19 @@ urls <- res %>%
   unnest() %>% 
   select(url, everything())
 write_csv(urls, "urls.csv")
+```
+
+## Adding JSON format
+
+```{r}
+list.files(pattern = "csv") %>%
+  walk(function(x) {
+    o <- read_csv(x)
+    jsonlite::write_json(
+      o,
+      path = glue::glue("{tools::file_path_sans_ext(x)}.json")
+    )
+  })
+
 ```
 

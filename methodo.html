@@ -697,26 +697,27 @@ details {
 <h2>Raw to csv</h2>
 <div id="downloading" class="section level3">
 <h3>Downloading</h3>
+<p>Made once, saved in <a href="raw.txt" class="uri">raw.txt</a>.</p>
 <pre class="r"><code>library(tidyverse)
 library(rvest)
-doc &lt;- read_html(&quot;https://emma.best/2018/07/29/11000-messages-from-private-wikileaks-chat-released/&quot;)</code></pre>
+doc &lt;- read_html(&quot;https://emma.best/2018/07/29/11000-messages-from-private-wikileaks-chat-released/&quot;)
+doc &lt;- doc %&gt;% 
+  # Getting the p
+  html_nodes(&quot;p&quot;) %&gt;%
+  html_text()
+
+doc &lt;- doc[! nchar(doc)  == 0]
+# Element 1 to 9 are the content of the blogpost, not the content of the conversation. Removing it:
+
+doc &lt;- doc[10:length(doc)]
+write(doc, &quot;raw.txt&quot;)</code></pre>
 </div>
 <div id="getting-data-as-a-table" class="section level3">
 <h3>Getting data as a table</h3>
-<pre class="r"><code>res_raw &lt;- doc %&gt;% 
-  # Getting the list inside the ol
-  html_nodes(&quot;p&quot;) %&gt;%
-  # Extracting the text
-  html_text() %&gt;% 
-  # Turning it into a table
-  as.tibble() %&gt;%
-  # Removing empty raws
-  filter(nchar(value) &gt; 1) </code></pre>
-</div>
-<div id="cleaning" class="section level3">
-<h3>Cleaning</h3>
-<p>Element 1 to 8 are the content of the blogpost, not the content of the conversation. Removing it:</p>
-<pre class="r"><code>res &lt;- slice(res_raw, 9:nrow(res_raw))</code></pre>
+<pre class="r"><code>library(tidyverse)
+res_raw &lt;- read.delim(&quot;raw.txt&quot;, sep = &quot;\n&quot;, header = FALSE) %&gt;% 
+  as.tibble() %&gt;% 
+  rename(value = V1)</code></pre>
 <p>In order to tidy the format, add <DMConversationEntry> as author when the text is a <code>DMConversationEntry</code></p>
 <pre class="r"><code>res &lt;- res_raw %&gt;% 
   mutate(value = str_replace_all(value, 
@@ -832,6 +833,17 @@ mentions %&gt;%
   unnest() %&gt;% 
   select(url, everything())
 write_csv(urls, &quot;urls.csv&quot;)</code></pre>
+</div>
+<div id="adding-json-format" class="section level2">
+<h2>Adding JSON format</h2>
+<pre class="r"><code>list.files(pattern = &quot;csv&quot;) %&gt;%
+  walk(function(x) {
+    o &lt;- read_csv(x)
+    jsonlite::write_json(
+      o,
+      path = glue::glue(&quot;{tools::file_path_sans_ext(x)}.json&quot;)
+    )
+  })</code></pre>
 </div>
 
 
