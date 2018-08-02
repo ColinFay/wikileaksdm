@@ -1,0 +1,128 @@
+---
+title: "Wikileaks Twitter DM - Timeline"
+author: '@_colinfay'
+date: "`r Sys.Date()`"
+fig_width: 10
+fig_height: 4 
+navlink: "[Wikileaks Twitter DM](https://colinfay.me/wikileaksdm)"
+og:
+  type: "article"
+  title: "Wikileaks Twitter DM"
+footer:
+  - content: '<a href="https://colinfay.me">colinfay.me</a> • <a href="https://twitter.com/_ColinFay">@_colinfay</a><br/>'
+output: markdowntemplates::skeleton
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
+source("funs.R")
+```
+
+`r shiny::includeMarkdown("intro.Rmd")`
+
+## Count of daily DMs
+
+A dataset with 2 columns 
+
++ date: the date
++ n: number of DMs 
+
+#### `r fa("download")` [daily.csv](daily.csv)
+
+```{r}
+read_csv("daily.csv") %>%
+  dt()
+```
+
+```{r}
+full <- read_csv("wikileaks_dm.csv") 
+dg(full, main = "DMs by day, 2015-2017", col = 1)
+```
+
+<details>
+<summary>Static plot</summary>
+```{r fig.width=10, fig.height=6}
+ggcount(full, main = "Wikileaks Twitter DM - DMs by day, 2015-2017", col = 1) 
+```
+</details>
+
+## DMs by year {.tabset}
+
+3 datasets (1 per year), each with 3 columns: 
+
++ text: extracted text 
++ date: date of the dm
++ user: user who sent the dm
+
+### 2015
+
+#### `r fa("download")` [2015.csv](2015.csv)
+
+```{r}
+quinze <- read_csv("2015.csv") 
+quinze %>% 
+  dt()
+```
+
+```{r}
+dg(quinze, main = "DMs by day, 2015", col = 2)
+```
+
+<details>
+<summary>Static plot</summary>
+
+```{r fig.width=10, fig.height=6}
+ggcount(quinze, main = "Wikileaks Twitter DM - DMs by day, 2015", col = 2)
+```
+
+</details>
+
+### 2016
+
+#### `r fa("download")` [2016.csv](2016.csv)
+
+```{r}
+seize <- read_csv("2016.csv")
+seize %>% 
+  dt()
+```
+
+```{r}
+dg(seize, main = "DMs by day, 2016", col = 3)
+```
+
+<details>
+<summary>Static plot</summary>
+
+```{r fig.width=10, fig.height=6}
+ggcount(seize, main = "Wikileaks Twitter DM - DMs by day, 2016", col = 3)
+```
+
+</details>
+
+### 2017
+
+#### `r fa("download")` [2017.csv](2017.csv)
+
+```{r}
+dixsept <- read_csv("2017.csv") 
+dixsept %>% 
+  dt()
+```
+
+
+```{r}
+dg(dixsept, main = "DMs by day, 2017", col = 4)
+```
+
+<details>
+<summary>Static plot</summary>
+
+```{r fig.width=10, fig.height=6}
+ggcount(dixsept, main = "Wikileaks Twitter DM - DMs by day, 2017", col = 4)
+
+```
+
+</details>
+
+`r shiny::includeMarkdown("outro.Rmd")`

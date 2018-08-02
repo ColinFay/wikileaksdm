@@ -1,0 +1,86 @@
+---
+title: "Wikileaks Twitter DM - Mentions, urls"
+author: '@_colinfay'
+date: "`r Sys.Date()`"
+fig_width: 10
+fig_height: 4 
+navlink: "[Wikileaks Twitter DM](https://colinfay.me/wikileaksdm)"
+og:
+  type: "article"
+  title: "Wikileaks Twitter DM"
+footer:
+  - content: '<a href="https://colinfay.me">colinfay.me</a> • <a href="https://twitter.com/_ColinFay">@_colinfay</a><br/>'
+output: markdowntemplates::skeleton
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
+source("funs.R")
+```
+
+`r shiny::includeMarkdown("intro.Rmd")`
+
+## Data format
+
++ Every csv is encoded in UTF8
++ You can find these csv in JSON format on the [GitHub repo](https://github.com/ColinFay/wikileaksdm)
+
+## Browse through the content
+
++ [Home](index.html) has the full dataset, to search and download
++ [Timeline](timeline.html) has a series of time-related content: notably DMs by years, and daily count of DMs
++ [Users](users.html) holds the dataset for each users 
++ [mentions_urls](mentions_urls.html) holds the extracted mentions and urls
++ [text_mining](text_mining.html) contains a series of text-frequency based analysis (mainly most frequent words).
+
+## Mentions
+
+DMs that contain a mention to a Twitter account. 
+
+A dataset with 4 columns 
+
++ mention: the mentioned account
++ text: extracted text 
++ date: the date
++ user: user who sent the dm
+
+#### `r fa("download")` [mentions.csv](mentions.csv)
+
+```{r}
+read_csv("mentions.csv") %>% 
+  dt()
+```
+
+### Count of the mentions:
+
+A dataset with 2 columns 
+
++ mention: the mention
++ n: number of DMs 
+
+#### `r fa("download")` [mentions_count.csv](mentions_count.csv)
+
+```{r}
+read_csv("mentions_count.csv") %>% 
+  dt()
+```
+
+## Urls
+
+Extracted links, (starting with `http`). 
+
+A dataset with 4 columns 
+
++ url: the found url
++ text: extracted text 
++ date: the date
++ user: user who sent the dm
+
+#### `r fa("download")` [urls.csv](urls.csv)
+
+```{r}
+read_csv("urls.csv") %>% 
+  dt()
+```
+
+`r shiny::includeMarkdown("outro.Rmd")`

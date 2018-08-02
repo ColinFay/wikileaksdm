@@ -1,0 +1,5 @@
+## Methodology 
+
+Everything has been done in R. 
+
+Methodology is described in [methodo](methodo.html)

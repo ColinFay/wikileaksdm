@@ -1,0 +1,59 @@
+<style>
+@import url('https://fonts.googleapis.com/css?family=Nunito+Sans:400,700');
+
+body{
+  font-family: 'Nunito Sans';
+}
+
+h2 {
+  border-bottom: 2px solid darkgrey;
+}
+h3:before {
+    content: "> ";
+    margin-right: 6px;
+}
+h4 {
+  text-align: center;
+  font-size: 2em;
+}
+.dataTables_wrapper{
+  padding-bottom: 30px ;
+}
+
+div .dygraphs {
+  margin-bottom: 30px ;
+}
+
+details {
+    margin-bottom: 30px;
+}
+</style>
+
+## About
+
+On the 29th of July 2018, Emma Best published on her website the copy of 11k+ wikileaks Twitter DM : <https://emma.best/2018/07/29/11000-messages-from-private-wikileaks-chat-released/>
+
+Here is a data extraction and wrangling of this corpus, to make it easily searchable, extractable and sharable. 
+
+## How to use this page 
+
++ Every "[link.csv](link.csv)" is a downloadable csv.
++ You can search and order every table. Results of the search are downloadable as csv or can be copied in the clipboard.
++ You can zoom in the time series by selecting the date range. You can also use the selector beside to choose this range. Double click to reset the settings.
++ Under each dynamic plot, you can find a static plot by clicking on "Static plot".
+
+> This page may not work as expected on Internet Explorer / Edge. Please switch to another browser if you have trouble reading this page.
+
+## Data format
+
++ Every csv is encoded in UTF8
++ You can find these csv in JSON format on the [GitHub repo](https://github.com/ColinFay/wikileaksdm)
+
+## Browse through the content
+
++ [Home](index.html) has the full dataset, to search and download.
++ [Timeline](timeline.html) has a series of time-related content: notably DMs by years, and daily count of DMs.
++ [Users](users.html) holds the dataset for each users.
++ [mentions_urls](mentions_urls.html) holds the extracted mentions and urls
+<!-- + [text_mining](text_mining.html) contains a series of text-frequency based analysis (mainly most frequent words). -->
++ [methodo](methodo.html) contains the methodology used for the data wrangling

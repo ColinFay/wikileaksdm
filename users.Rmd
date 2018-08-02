@@ -1,0 +1,364 @@
+---
+title: "Wikileaks Twitter DM - Users"
+author: '@_colinfay'
+date: "`r Sys.Date()`"
+fig_width: 10
+fig_height: 4 
+navlink: "[Wikileaks Twitter DM](https://colinfay.me/wikileaksdm)"
+og:
+  type: "article"
+  title: "Wikileaks Twitter DM"
+footer:
+  - content: '<a href="https://colinfay.me">colinfay.me</a> • <a href="https://twitter.com/_ColinFay">@_colinfay</a><br/>'
+output: markdowntemplates::skeleton
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
+source("funs.R")
+```
+
+`r shiny::includeMarkdown("intro.Rmd")`
+
+## Monthly participation by user
+
+```{r}
+full <- read_csv("wikileaks_dm.csv") 
+library(lubridate)
+r <- full %>%
+  mutate(date = floor_date(date, "month")) %>% 
+  count(date, user) %>% 
+  spread(user, n) %>%
+  as.data.frame()
+rownames(r) <- r$date
+dygraph(r, main = "Monthly participation by user", width = "100%") %>%
+    dyRangeSelector(height = 40)
+```
+
+<details>
+<summary>Static plot</summary>
+```{r fig.width=10, fig.height=6}
+full %>%
+  mutate(date = floor_date(date, "month")) %>%
+  count(date, user) %>% 
+  ggplot() + 
+  aes(date, n, group = user, color = user) +
+  scale_color_manual(values = colours) +
+   geom_line() + 
+      labs(
+      title = "Monthly participation by user",
+      subtitle = "Data via Emma Best - https://emma.best",
+      x = "Date",
+      y = "Number of DMs"
+    ) + th()
+```
+</details>
+
+## Count of user participation
+
+A dataset with 2 columns 
+
++ user: the user
++ n: number of DMs in the corpus for that user
+
+#### `r fa("download")` [user_count.csv](user_count.csv)
+
+```{r}
+read_csv("user_count.csv") %>% 
+  dt()
+```
+
+```{r fig.width=10, fig.height=6}
+read_csv("user_count.csv") %>% 
+  ggplot() + 
+  aes(reorder(user, n), n) +
+  geom_col(fill=colours[5]) +
+  coord_flip() +
+    labs(
+      title = "User participation",
+      subtitle = "Data via Emma Best - https://emma.best",
+      x = " ",
+      y = "Number of DMs"
+    ) + 
+    th()
+```
+
+### DMs by users
+
+15 datasets (1/user), each with 3 columns: 
+
++ text: extracted text 
++ date: date of the dm
++ user: user who sent the dm
+
+### Bean
+
+#### `r fa("download")` [user_Bean.csv](user_Bean.csv)
+
+```{r}
+fdt("Bean")
+fdg("Bean", col = 1)
+```
+
+<details>
+<summary>Static plot</summary>
+
+```{r fig.width=10, fig.height=6}
+ggcount_user("Bean", col = 1)
+```
+
+</details>
+
+### Cabledrum
+
+#### `r fa("download")` [user_Cabledrum.csv](user_Cabledrum.csv)
+
+```{r}
+fdt("Cabledrum")
+fdg("Cabledrum", col = 2)
+```
+
+<details>
+<summary>Static plot</summary>
+
+```{r fig.width=10, fig.height=6}
+ggcount_user("Cabledrum", col = 2)
+```
+
+</details>
+
+### DMConversationEntry
+
+#### `r fa("download")` [user_DMConversationEntry.csv](user_DMConversationEntry.csv)
+
+```{r}
+fdt("DMConversationEntry")
+fdg("DMConversationEntry", col = 3)
+```
+
+<details>
+<summary>Static plot</summary>
+
+```{r fig.width=10, fig.height=6}
+ggcount_user("DMConversationEntry", col = 3)
+```
+
+</details>
+
+### Emmy B
+
+#### `r fa("download")` [user_Emmy.B.csv](user_Emmy.B.csv)
+
+```{r}
+fdt("Emmy.B")
+fdg("Emmy.B", col = 4)
+```
+
+<details>
+<summary>Static plot</summary>
+
+```{r fig.width=10, fig.height=6}
+ggcount_user("Emmy.B", col = 4)
+```
+
+</details>
+
+### LibertarianLibrarian
+
+#### `r fa("download")` [user_LibertarianLibrarian.csv](user_LibertarianLibrarian.csv)
+
+```{r}
+fdt("LibertarianLibrarian")
+fdg("LibertarianLibrarian", col = 5)
+```
+
+<details>
+<summary>Static plot</summary>
+
+```{r fig.width=10, fig.height=6}
+ggcount_user("LibertarianLibrarian", col = 5)
+```
+
+</details>
+
+### M
+
+#### `r fa("download")` [user_M.csv](user_M.csv)
+
+```{r}
+fdt("M")
+fdg("M", col = 6)
+```
+
+<details>
+<summary>Static plot</summary>
+
+```{r fig.width=10, fig.height=6}
+ggcount_user("M", col = 6)
+```
+
+</details>
+
+### Matt Watt
+
+#### `r fa("download")` [user_Matt.Watt.csv](user_Matt.Watt.csv)
+
+```{r}
+fdt("Matt.Watt")
+fdg("Matt.Watt", col = 7)
+```
+
+<details>
+<summary>Static plot</summary>
+
+```{r fig.width=10, fig.height=6}
+ggcount_user("Matt.Watt", col = 7)
+```
+
+</details>
+
+### noll
+
+#### `r fa("download")` [user_noll.csv](user_noll.csv)
+
+```{r}
+fdt("noll")
+fdg("noll", col = 8)
+```
+
+<details>
+<summary>Static plot</summary>
+
+```{r fig.width=10, fig.height=6}
+ggcount_user("noll", col = 8)
+```
+
+</details>
+
+### SAWC Sydney
+
+#### `r fa("download")` [user_SAWC.Sydney.csv](user_SAWC.Sydney.csv)
+
+```{r}
+fdt("SAWC.Sydney")
+fdg("SAWC.Sydney", col = 8)
+```
+
+<details>
+<summary>Static plot</summary>
+
+```{r fig.width=10, fig.height=6}
+ggcount_user("SAWC.Sydney", col = 8)
+```
+
+</details>
+
+### voidiss
+
+#### `r fa("download")` [user_voidiss.csv](user_voidiss.csv)
+
+```{r}
+fdt("voidiss")
+fdg("voidiss", col = 9)
+```
+
+<details>
+<summary>Static plot</summary>
+
+```{r fig.width=10, fig.height=6}
+ggcount_user("voidiss", col = 9)
+```
+
+</details>
+
+### WikiLeaks Press
+
+#### `r fa("download")` [user_WikiLeaks.Press.csv](user_WikiLeaks.Press.csv)
+
+```{r}
+fdt("WikiLeaks.Press")
+fdg("WikiLeaks.Press", col = 10)
+```
+
+<details>
+<summary>Static plot</summary>
+
+```{r fig.width=10, fig.height=6}
+ggcount_user("WikiLeaks.Press", col = 10)
+```
+
+</details>
+
+### WikiLeaks Task Force
+
+#### `r fa("download")` [user_WikiLeaks.Task.Force.csv](user_WikiLeaks.Task.Force.csv)
+
+```{r}
+fdt("WikiLeaks.Task.Force")
+fdg("WikiLeaks.Task.Force", col = 11)
+```
+
+<details>
+<summary>Static plot</summary>
+
+```{r fig.width=10, fig.height=6}
+ggcount_user("WikiLeaks.Task.Force", col = 11)
+```
+
+</details>
+
+### WikiLeaks
+
+#### `r fa("download")` [user_WikiLeaks.csv](user_WikiLeaks.csv)
+
+```{r}
+fdt("WikiLeaks")
+fdg("WikiLeaks", col = 12)
+```
+
+<details>
+<summary>Static plot</summary>
+
+```{r fig.width=10, fig.height=6}
+ggcount_user("Bean", col = 12)
+```
+
+</details>
+
+### WISE Up Action
+
+#### `r fa("download")` [user_WISE.Up.Action.csv](user_WISE.Up.Action.csv)
+
+```{r}
+fdt("WISE.Up.Action")
+fdg("WISE.Up.Action", col = 13)
+```
+
+<details>
+<summary>Static plot</summary>
+
+```{r fig.width=10, fig.height=6}
+ggcount_user("Bean", col = 13)
+```
+
+</details>
+
+### WISE Up Wales
+
+#### `r fa("download")` [user_WISE.Up.Wales.csv](user_WISE.Up.Wales.csv)
+
+```{r}
+fdt("WISE.Up.Wales")
+fdg("WISE.Up.Wales", col = 14)
+```
+
+<details>
+<summary>Static plot</summary>
+
+```{r fig.width=10, fig.height=6}
+ggcount_user("WISE.Up.Wales", col = 14)
+```
+
+</details>
+
+`r shiny::includeMarkdown("outro.Rmd")`
