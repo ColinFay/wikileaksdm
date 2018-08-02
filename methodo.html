@@ -693,41 +693,56 @@ details {
     margin-bottom: 30px;
 }
 </style>
+
+<h2>About</h2>
+
+<p>On the 29th of July 2018, Emma Best published on her website the copy of 11k+ wikileaks Twitter DM : <a href="https://emma.best/2018/07/29/11000-messages-from-private-wikileaks-chat-released/">https://emma.best/2018/07/29/11000-messages-from-private-wikileaks-chat-released/</a></p>
+
+<p>Here is a data extraction and wrangling of this corpus, to make it easily searchable, extractable and sharable. </p>
+
+<h2>How to use this page</h2>
+
+<ul>
+<li>Every &ldquo;<a href="link.csv">link.csv</a>&rdquo; is a downloadable csv.</li>
+<li>You can search and order every table. Results of the search are downloadable as csv or can be copied in the clipboard.</li>
+<li>You can zoom in the time series by selecting the date range. You can also use the selector beside to choose this range. Double click to reset the settings.</li>
+<li>Under each dynamic plot, you can find a static plot by clicking on &ldquo;Static plot&rdquo;.</li>
+</ul>
+
+<blockquote>
+<p>This page may not work as expected on Internet Explorer / Edge. Please switch to another browser if you have trouble reading this page.</p>
+</blockquote>
+
+<h2>Data format</h2>
+
+<ul>
+<li>Every csv is encoded in UTF8</li>
+<li>You can find these csv in JSON format on the <a href="https://github.com/ColinFay/wikileaksdm">GitHub repo</a></li>
+</ul>
+
+<h2>Browse through the content</h2>
+
+<ul>
+<li><a href="index.html">Home</a> has the full dataset, to search and download.</li>
+<li><a href="timeline.html">Timeline</a> has a series of time-related content: notably DMs by years, and daily count of DMs.</li>
+<li><a href="users.html">Users</a> holds the dataset for each users.</li>
+<li><a href="mentions_urls.html">mentions_urls</a> holds the extracted mentions and urls</li>
+<li><a href="methodo.html">methodo</a> contains the methodology used for the data wrangling</li>
+</ul>
+
 <div id="raw-to-csv" class="section level2">
 <h2>Raw to csv</h2>
 <div id="downloading" class="section level3">
 <h3>Downloading</h3>
 <p>Made once, saved in <a href="raw.txt" class="uri">raw.txt</a>.</p>
-<pre class="r"><code>library(tidyverse)
-library(rvest)
-doc &lt;- read_html(&quot;https://emma.best/2018/07/29/11000-messages-from-private-wikileaks-chat-released/&quot;)
-doc &lt;- doc %&gt;% 
-  # Getting the p
-  html_nodes(&quot;p&quot;) %&gt;%
-  html_text()
-
-doc &lt;- doc[! nchar(doc)  == 0]
-# Element 1 to 9 are the content of the blogpost, not the content of the conversation. Removing it:
-
-doc &lt;- doc[10:length(doc)]
-write(doc, &quot;raw.txt&quot;)</code></pre>
 </div>
 <div id="getting-data-as-a-table" class="section level3">
 <h3>Getting data as a table</h3>
-<pre class="r"><code>library(tidyverse)
-res_raw &lt;- read.delim(&quot;raw.txt&quot;, sep = &quot;\n&quot;, header = FALSE) %&gt;% 
-  as.tibble() %&gt;% 
-  rename(value = V1)</code></pre>
 <p>In order to tidy the format, add <DMConversationEntry> as author when the text is a <code>DMConversationEntry</code></p>
-<pre class="r"><code>res &lt;- res_raw %&gt;% 
-  mutate(value = str_replace_all(value, 
-                                 &quot;\\[DMConversationEntry\\]&quot;,
-                                 &quot;&lt;DMConversationEntry&gt;&quot;)) </code></pre>
 <p>Removed, the last of the corpus:</p>
 <ul>
 <li>“[LatestTweetID] 931704226425856001”, line 22751 of the original document</li>
 </ul>
-<pre class="r"><code>res &lt;- filter(res, ! str_detect(value, &quot;931704226425856001&quot;))</code></pre>
 <p>When a line <code>n</code> doesn’t start with a date (middle of a DM), paste the content at the end of the line n-1.</p>
 <p>Example with lines 93 &amp; 94:</p>
 <table>
@@ -749,101 +764,41 @@ res_raw &lt;- read.delim(&quot;raw.txt&quot;, sep = &quot;\n&quot;, header = FAL
 </tbody>
 </table>
 <p>94 is paste at the end of 93 and removed.</p>
-<pre class="r"><code>for (i in nrow(res):1){
-  if (!grepl(pattern = &quot;\\[.{4}-.{2}-.{2} .{2}:.{2}:.{2}\\]|DMConversationEntry&quot;, res[i,])){
-    res[i-1,] &lt;- paste(res[i-1,], res[i,])
-  }
-}
-# Remove column with no date
-res &lt;- res %&gt;% 
-  mutate(has_date = str_detect(value, pattern = &quot;\\[.{4}-.{2}-.{2} .{2}:.{2}:.{2}\\]|DMConversationEntry&quot;)) %&gt;%
-  filter(has_date) %&gt;%
-  select(-has_date)</code></pre>
 </div>
 <div id="extract-key-elements" class="section level3">
 <h3>Extract key elements</h3>
-<pre class="r"><code>res &lt;- res %&gt;%
-  extract(value,&quot;user&quot;, regex = &quot;&lt;([a-zA-Z0-9 ]*)&gt;&quot;, remove = FALSE) %&gt;%
-  extract(value,&quot;date&quot;, regex = &quot;\\[(.{4}-.{2}-.{2} .{2}:.{2}:.{2})\\] .*&quot;, remove = FALSE) %&gt;%
-  extract(value, &quot;text&quot;, regex = &quot;&lt;[a-zA-Z0-9 ]*&gt; (.*)&quot;, remove = FALSE) %&gt;%
-  select(-value)</code></pre>
 <p>When date is missing, it’s because it’s a <code>DMConversationEntry</code>.</p>
-<pre class="r"><code>res %&gt;% 
-  filter(user == &quot;DMConversationEntry&quot;) %&gt;%
-  summarize(nas = sum(is.na(date)), 
-            nrow = n())</code></pre>
 <pre><code>## # A tibble: 1 x 2
 ##     nas  nrow
 ##   &lt;int&gt; &lt;int&gt;
 ## 1    20    20</code></pre>
 <p>We fill this with the directly preceeding date:</p>
-<pre class="r"><code>res &lt;- fill(res, date)</code></pre>
 </div>
 <div id="save" class="section level3">
 <h3>Save</h3>
 <div id="global" class="section level4">
 <h4>Global</h4>
-<pre class="r"><code>write_csv(res, &quot;wikileaks_dm.csv&quot;)</code></pre>
 </div>
 <div id="year" class="section level4">
 <h4>Year</h4>
-<pre class="r"><code>range(res$date)</code></pre>
 <pre><code>## [1] &quot;2015-05-01 13:52:11&quot; &quot;2017-11-10 04:30:46&quot;</code></pre>
-<pre class="r"><code>walk(2015:2017, 
-    ~ filter(res, lubridate::year(date) == .x) %&gt;%
-    write_csv(glue::glue(&quot;{.x}.csv&quot;))
-    )</code></pre>
 </div>
 <div id="user" class="section level4">
 <h4>User</h4>
-<pre class="r"><code>walk(unique(res$user), 
-    ~ filter(res, user == .x) %&gt;%
-    write_csv(glue::glue(&quot;user_{make.names(.x)}.csv&quot;))
-    )</code></pre>
 </div>
 </div>
 </div>
 <div id="counting-users-participation" class="section level2">
 <h2>Counting users participation</h2>
-<pre class="r"><code>res %&gt;%
-  count(user, sort = TRUE) %&gt;%
-  write_csv(&quot;user_count.csv&quot;)</code></pre>
 </div>
 <div id="counting-activity-by-days" class="section level2">
 <h2>Counting activity by days</h2>
-<pre class="r"><code>res %&gt;%
-  mutate(date = lubridate::ymd_hms(date), 
-         date = lubridate::date(date)) %&gt;% 
-  count(date) %&gt;%
-  write_csv(&quot;daily.csv&quot;)</code></pre>
 </div>
 <div id="adding-extra-info" class="section level2">
 <h2>Adding extra info</h2>
-<pre class="r"><code>mentions &lt;- res %&gt;% 
-  mutate(mention = str_extract_all(text, &quot;@[a-zA-Z0-9_]+&quot;)) %&gt;%
-  unnest(mention) %&gt;% 
-  select(mention, everything())
-write_csv(mentions, &quot;mentions.csv&quot;)
-
-mentions %&gt;%
-  count(mention, sort = TRUE) %&gt;%
-  write_csv(&quot;mentions_count.csv&quot;)</code></pre>
-<pre class="r"><code>urls &lt;- res %&gt;% 
-  mutate(url = str_extract_all(text, &quot;http.+&quot;)) %&gt;%
-  unnest() %&gt;% 
-  select(url, everything())
-write_csv(urls, &quot;urls.csv&quot;)</code></pre>
 </div>
 <div id="adding-json-format" class="section level2">
 <h2>Adding JSON format</h2>
-<pre class="r"><code>list.files(pattern = &quot;csv&quot;) %&gt;%
-  walk(function(x) {
-    o &lt;- read_csv(x)
-    jsonlite::write_json(
-      o,
-      path = glue::glue(&quot;{tools::file_path_sans_ext(x)}.json&quot;)
-    )
-  })</code></pre>
 </div>
 
 

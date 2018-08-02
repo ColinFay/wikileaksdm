@@ -55,5 +55,4 @@ Here is a data extraction and wrangling of this corpus, to make it easily search
 + [Timeline](timeline.html) has a series of time-related content: notably DMs by years, and daily count of DMs.
 + [Users](users.html) holds the dataset for each users.
 + [mentions_urls](mentions_urls.html) holds the extracted mentions and urls
-<!-- + [text_mining](text_mining.html) contains a series of text-frequency based analysis (mainly most frequent words). -->
 + [methodo](methodo.html) contains the methodology used for the data wrangling
