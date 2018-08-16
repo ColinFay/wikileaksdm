@@ -56,3 +56,7 @@ Here is a data extraction and wrangling of this corpus, to make it easily search
 + [Users](users.html) holds the dataset for each users.
 + [mentions_urls](mention_urls.html) holds the extracted mentions and urls
 + [methodo](methodo.html) contains the methodology used for the data wrangling
+
+### About DMConversationEntry
+
+As documented in the methodo, the DMConversationEntry have no date in the dataset, hence the date is inferred from the directly preceeding date, __so these entries might not be correct when it comes to date__.

@@ -131,6 +131,8 @@ ggcount_user("Cabledrum", col = 2)
 
 #### `r fa("download")` [user_DMConversationEntry.csv](user_DMConversationEntry.csv)
 
+> Note: As documented in the methodo, the DMConversationEntry have no date in the dataset, hence the date is inferred from the directly preceeding date, __so these entries might not be correct when it comes to date__.
+
 ```{r}
 fdt("DMConversationEntry")
 fdg("DMConversationEntry", col = 3)
